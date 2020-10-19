@@ -40,41 +40,61 @@ A5 = Ans{5}; A6 = Ans{6};
 Tspan = 0: 0.5: 32;
 Epsilons = [0.1, 1, 20];
 y0 = [sqrt(3), 1];
-P2Answers1 = LinkedList();
+import java.util.*; P2Answers1 = ArrayList(); % Trouble -------------------
 
-figure; hold on;
+% figure; hold on;
 
 for Epsilon = Epsilons
     [Tout, Yout] = ode45(@(t, y) Oscillator(t, y, Epsilon), Tspan, y0);
-    plot(Yout(:, 1), Yout(: ,2));
-    P2Answers1.push(Yout(:, 1));
+    % plot(Yout(:, 1), Yout(: ,2));
+    P2Answers1.add(Yout(:, 1));
 end
 A7 = [P2Answers1.get(0) P2Answers1.get(1)  P2Answers1.get(2)]; 
 
 %% ------------------------------------------------------------------------
 % No specifying the step size, but specified the Tolerance. 
-Tspan = [0, 32];
-Epsilon = 1; y0 = [2, pi*pi];
-TOLs = 10.^[-(0:1:10)];
-import java.util.*; P2Answers2 = LinkedList();
 
-for TOL = TOLs
-   Options = odeset("AbsTol", TOL, "RelTol", TOL);
-   [T, Y] = ode45(@(t, y) Oscillator(t, y, Epsilon), Tspan, y0, Options);
-   AvgDiff = mean(diff(T));
-   % figure;
-   % plot(Y(:, 1), Y(:, 2));
-   disp(strcat("For a Tol of ", num2str(TOL), " the mean time stepping diff is"... 
-       , num2str(AvgDiff)));
-   P2Answers2.add(mean(diff(T)));
+Slopes = [];
+
+for OdeSolver = {@ode45, @ode23, @ode113}
+
+    Tspan = [0, 32];
+    Epsilon = 1; y0 = [2, pi*pi];
+    TOLs = 10.^[-(4:1:10)];
+    import java.util.*; Arr = ArrayList();  % Trouble ---------------------
+
+    for TOL = TOLs
+       Options = odeset("AbsTol", TOL, "RelTol", TOL);
+       [T, Y] = OdeSolver{1}...
+           (@(t, y) Oscillator(t, y, Epsilon), Tspan, y0, Options);
+       AvgDiff = mean(diff(T));
+       % figure;
+       % plot(Y(:, 1), Y(:, 2));
+       disp(strcat("For a Tol of ", num2str(TOL),... 
+           " the mean time stepping diff is "... 
+           , num2str(AvgDiff)));
+       Arr.add(mean(diff(T)));
+    end
+
+    P2Answers2 = zeros(1, Arr.size);
+    for I = 1: Arr.size
+        P2Answers2(I) = Arr.get(I - 1);
+    end
+
+    % ---------------------------------------------------------------------
+    loglog(P2Answers2, TOLs, "o-"); hold on;
+    xlabel("$\log(\Delta t)$", 'interpreter', 'latex');
+    ylabel("log(TOL)");
+
+    % ---------------------------------------------------------------------
+    % Get the slope out of the log log plot. 
+    Coefficients = polyfit(log(P2Answers2), log(TOLs), 1);
+    Slopes(end + 1) = Coefficients(1);
+    disp(strcat("The Slope is: ", num2str(Slope)));
+
 end
+A8 = Slopes(1); A9 = Slopes(2); A10 = Slopes(3);
+legend("45", "23", "113");
 
-% -------------------------------------------------------------------------
-% Plot shit out. 
-
-
-
-
-
-
-
+%% Probem 3: 
+% Fitzhugh Neurons ODEs 
