@@ -1,10 +1,6 @@
-
-clear all; close all, clc;
-
-% Setting things up. 
-
 %% 
 % Order of accuracy for the Euler, Heun's methods:
+clear all; close all, clc;
 hold on;
 
 DeltaTs = 2.^(-2:-1:-8); 
@@ -36,12 +32,11 @@ A5 = Ans{5}; A6 = Ans{6};
 
 %% ------------------------------------------------------------------------
 % The Vander Pol Osicllator
-
+import java.util.*
 Tspan = 0: 0.5: 32;
 Epsilons = [0.1, 1, 20];
 y0 = [sqrt(3), 1];
 P2Answers1 = LinkedList();
-
 figure; hold on;
 
 for Epsilon = Epsilons
@@ -53,24 +48,19 @@ A7 = [P2Answers1.get(0) P2Answers1.get(1)  P2Answers1.get(2)];
 
 %% ------------------------------------------------------------------------
 % No specifying the step size, but specified the Tolerance. 
+
 Tspan = [0, 32];
 Epsilon = 1; y0 = [2, pi*pi];
-TOLs = 10.^[-(0:1:10)];
-import java.util.*; P2Answers2 = LinkedList();
+TOLs = 10.^[-(4:1:10)];
 
 for TOL = TOLs
    Options = odeset("AbsTol", TOL, "RelTol", TOL);
-   [T, Y] = ode45(@(t, y) Oscillator(t, y, Epsilon), Tspan, y0, Options);
-   AvgDiff = mean(diff(T));
-   % figure;
-   % plot(Y(:, 1), Y(:, 2));
-   disp(strcat("For a Tol of ", num2str(TOL), " the mean time stepping diff is"... 
-       , num2str(AvgDiff)));
-   P2Answers2.add(mean(diff(T)));
+   [T, Y] = ode45("rhs", Tspan, y0, Options);
+   
 end
 
-% -------------------------------------------------------------------------
-% Plot shit out. 
+
+
 
 
 
