@@ -15,18 +15,18 @@ function Fxnout = Fitzhugh(t, y, params)
     d21 = params.d21;
     
     dv1 = @(t, y, a1, a2, b, c, i) ... 
-        -y(1)^3 + (1 + a1)*y(1)^2 - a_1*y(1) - y(2) + i + d12*y(3);
+        -y(1)^3 + (1 + a1)*y(1)^2 - a1*y(1) - y(2) + i + d12*y(3);
     
     dw1 = @(t, y, a1, a2, b, c, i) ... 
-        b*y(3) - c*y(2);
+        b*y(1) - c*y(2);
     
     dv2 = @(t, y, a1, a2, b, c, i) ... 
-         -y(3)^3 + (1 + a2)*y(3)^2 - a_2*y(3) - y(4) + i + d21*y(1);
+         -y(3)^3 + (1 + a2)*y(3)^2 - a2*y(3) - y(4) + i + d21*y(1);
     
     dw2 = @(t, y, a1, a2, b, c, i) ... 
         b*y(3) - c*y(4);
        
-    Fxnout = [dv1(t, y, a1, a2, b, c, i); 
+    Fxnout = [dv1(t, y, a1, a2, b, c, i);
               dw1(t, y, a1, a2, b, c, i); 
               dv2(t, y, a1, a2, b, c, i); 
               dw2(t, y, a1, a2, b, c, i)];

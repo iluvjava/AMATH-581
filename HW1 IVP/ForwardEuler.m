@@ -16,7 +16,7 @@ function Fxnout = ForwardEuler(f, y0, dt)
     for I = 2:length(dt)
         PreviousY = Fvalues(I - 1);
         Dt = dt(I) - dt(I - 1); 
-        Fvalues(I) = PreviousY + Dt*f(dt(I), PreviousY);
+        Fvalues(I) = PreviousY + Dt*f(dt(I - 1), PreviousY);
     end
     Fxnout = Fvalues;
 end

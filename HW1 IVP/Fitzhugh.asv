@@ -1,9 +1,0 @@
-function Fxnout = Fitzhugh(t, y, a1, a2, b, c, i)
-%   Fitzhugh neurons system. 
-%   Return: 
-%       Column vector, the derivative of the function. 
-
-    dv1 = @()
-
-end
-

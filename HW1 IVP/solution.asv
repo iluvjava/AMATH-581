@@ -104,39 +104,39 @@ function [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15] = st
     end
 
     function [A11, A12, A13, A14, A15] = Problem3(~)
-        Params = FitzhughParams(); 
-        Params.a1 = 0.05;
-        Params.a2 = 0.25;
-        Params.b = 0.01;
-        Params.c = 0.01;
-        Params.i = 0.1; 
-        y0 = [0.1, 0, 0.1, 0];
+Params = FitzhughParams(); 
+Params.a1 = 0.05;
+Params.a2 = 0.25;
+Params.b = 0.01;
+Params.c = 0.01;
+Params.i = 0.1; 
+y0 = [0.1, 0, 0.1, 0];
 
-        Interactions = {}; 
-        Interactions{1} = [0, 0];
-        Interactions{2} = [0, 0.2]; 
-        Interactions{3} = [-0.1, 0.2];
-        Interactions{4} = [-0.3, 0.2];
-        Interactions{5} = [-0.5, 0.2];
+Interactions = {}; 
+Interactions{1} = [0, 0];
+Interactions{2} = [0, 0.2]; 
+Interactions{3} = [-0.1, 0.2];
+Interactions{4} = [-0.3, 0.2];
+Interactions{5} = [-0.5, 0.2];
 
-        Tspan = 0: 0.5: 100; 
+Tspan = 0: 0.5: 100; 
 
-        import java.util.ArrayList; TheSolutions = ArrayList();
-        for Interact = Interactions
-            Params.d12 = Interact{1}(1);
-            Params.d21 = Interact{1}(2);
-            disp(Params)
-            [Ts, Ys] = ode15s(@(t, y) Fitzhugh(t, y, Params), Tspan, y0);
-            YsPermuted = [Ys(:, 1), Ys(:, 3), Ys(:, 2), Ys(:, 4)];
-            disp(strcat("The size is: ", num2str(size(YsPermuted))));
-            TheSolutions.add(YsPermuted);
-        end
+import java.util.ArrayList; TheSolutions = ArrayList();
+for Interact = Interactions
+    Params.d12 = Interact{1}(1);
+    Params.d21 = Interact{1}(2);
+    disp(Params)
+    [Ts, Ys] = ode15s(@(t, y) Fitzhugh(t, y, Params), Tspan, y0);
+    YsPermuted = [Ys(:, 1), Ys(:, 3), Ys(:, 2), Ys(:, 4)];
+    disp(strcat("The size is: ", num2str(size(YsPermuted))));
+    TheSolutions.add(YsPermuted);
+end
 
-        A11 = TheSolutions.get(0); 
-        A12 = TheSolutions.get(1);
-        A13 = TheSolutions.get(2);
-        A14 = TheSolutions.get(3);
-        A15 = TheSolutions.get(4);
+A11 = TheSolutions.get(0); 
+A12 = TheSolutions.get(1);
+A13 = TheSolutions.get(2);
+A14 = TheSolutions.get(3);
+A15 = TheSolutions.get(4);
 
     end
 
