@@ -52,7 +52,8 @@ function [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15] = st
         % figure; hold on;
 
         for Epsilon = Epsilons
-            [Tout, Yout] = ode45(@(t, y) Oscillator(t, y, Epsilon), Tspan, y0);
+            [Tout, Yout] = ode45(@(t, y)... 
+                Oscillator(t, y, Epsilon), Tspan, y0);
             % plot(Yout(:, 1), Yout(: ,2));
             P2Answers1.add(Yout(:, 1));
             disp(strcat("Oscillator for epsilon: ", num2str(Epsilon)));
