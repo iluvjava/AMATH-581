@@ -29,7 +29,7 @@ end
 
 %% Problem 2 A very good Computation Restults: 
 clear variables; 
-L = 8; 
+L = 8;
 DeltaX = 0.001; 
 Xs = -L: DeltaX: L;
 
@@ -69,4 +69,7 @@ hold on;
 for Col = V
     plot(Xs, abs(Col));
 end
+
+%% Problem 2 everuything follows from the PPT. 
+clear variables
 
