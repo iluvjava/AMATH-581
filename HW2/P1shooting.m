@@ -1,6 +1,5 @@
 %%
-clc; 
-import java.util.*;
+clc; import java.util.*;
 
 A = 1; L = 4; Epsilon = 1; Xspan = -L: 0.1: L;
 Options = odeset("abstol", 1e-13, "reltol", 1e-13);
