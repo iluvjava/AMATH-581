@@ -27,5 +27,4 @@ function [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16,
     A17 = 0;
     A18 = 0;
 end
-
 % your extra functions, if you need them, can be in other files (don't forget to upload them too!)
