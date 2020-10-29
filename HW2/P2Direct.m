@@ -49,7 +49,6 @@ for Col = V
 end
 
 
-
 %% Problem 2 BootStrap 
 clear variables; 
 L = 4; 
@@ -94,13 +93,23 @@ for Col = V
 end
 title("No Bootstrap");
 
-Counter = 1; 
 figure; hold on;
-for Col = V
-    plot(XsFull, abs(BootStrap(Col, L, D(Counter, Counter), DeltaX)))
-    Counter = Counter + 1;
+BSNormAbsEigFxns = ... 
+    zeros(size(V, 1)+ 2, size(V, 2));
+for I = 1: size(V, 2)
+    BSNormAbsEigFxns(:, I)...
+        = abs(BootStrap(V(:, I), L, D(I, I), DeltaX));
+    plot(XsFull, BSNormAbsEigFxns(:, I));
 end
 title("Bootstrap with BC ");
+% Save results for the HW. 
+
+A7  = BSNormAbsEigFxns(:, 1); 
+A8  = BSNormAbsEigFxns(:, 2); 
+A9  = BSNormAbsEigFxns(:, 3); 
+A10 = BSNormAbsEigFxns(:, 4); 
+A11 = BSNormAbsEigFxns(:, 5); 
+A12 = diag(D);
 
 % Bootstrap the boundary
 function Res = BootStrap(solutionVec, L, Epsilon, DeltaX)

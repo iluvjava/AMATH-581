@@ -10,6 +10,7 @@ function [FxnNorm, Boundary, Solution] = ...
     FxnNorm = sqrt(trapz(Xspan, abs(Phi.*Phi)));
     Boundary = Ys(end, 2) + sqrt(L^2 - epsilon)*Ys(end, 1);
     Solution = Phi;
+    
     function Y = NonLinearQuantum(x, y)
         y1 = @(x, y) y(2);
         y2 = @(x, y) (gamma*abs(y(1)) + x^2 - epsilon)*y(1);
