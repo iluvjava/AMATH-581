@@ -1,0 +1,36 @@
+classdef params
+    %PARAMS Summary of this class goes here
+    %   Detailed explanation goes here
+    
+    properties
+        A; % Partial x operational matrix. 
+        B; % Partial y operational matrix. 
+        C; % Laplacian operational matrix. 
+        A2; % Laplacian for solving the Stream function matrix. 
+        SolveModes; 
+            % What is the mode for solving for the stream function? 
+        
+        % These parameters are for solving the Stream function using LU
+        % decomposition. 
+        L;  U;  P;
+    end
+    
+    methods 
+        function obj = params(n, deltaX)
+            P  = FiniteDiffMatrix([-1, 0, -1], [-1, 0, 1], n);
+            PartialX  = kron(P, eye(n))./(2*deltaX);
+            PartialY  = kron(eye(n), P)./(2*deltaX);
+            P2 = FiniteDiffMatrix([1, -2, 1], [-1, 0, 1], n);
+            Laplacian = kron(P2, eye(n)) + kron(eye(n), P2);
+            Laplacian = Laplacian./(deltaX.^2);
+            obj.A = PartialX;
+            obj.B = PartialY;
+            obj.C = Laplacian;
+            obj.A2 = Laplacian; 
+            obj.A2(1, 1) = 2; 
+            [obj.L, obj.U, obj.P] = lu(obj.A2);
+        end
+    end
+    
+end
+
