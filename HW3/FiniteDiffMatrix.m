@@ -19,10 +19,10 @@ function P = FiniteDiffMatrix(filter, diagonalPosition, n)
     % Handle Periodic Conditions. 
     for I = 1: length(NewDiag)
        if diagonalPosition(I) < 0
-           NewDiag(I) = -(n + diagonalPosition(I));
+           NewDiag(I) = (n + diagonalPosition(I));
         
        elseif diagonalPosition(I) > 0
-           NewDiag(I) = n - diagonalPosition(I);
+           NewDiag(I) = -(n - diagonalPosition(I));
        else
            filter(I) = 0;  % No overlap. 
        end

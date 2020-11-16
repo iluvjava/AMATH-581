@@ -1,6 +1,12 @@
 % Homework MATLAB template file
 % Your main file should be named "solution.m" and it should be saved as UTF-8 file.
 
+% !!! Solution failed because I didn't make the matrix from sparse to full
+% matrix. 
+
+% !!! Solution failed because the coefficients for the finite diff for
+% patial x, second order. 
+
 function [consoleout, A1, A2, A3, A4, A5] = solution()
  [consoleout, A1, A2, A3, A4, A5] = evalc('student_solution(0)'); 
 end
@@ -43,6 +49,7 @@ function [A1, A2, A3] = Problem1()
     A1 = Laplacian;
     A2 = PartialX2d;
     A3 = PartialY2d;
+    A1 = full(A1); A2 = full(A2); A3 = full(A3);
 end
 
 function [A4, A5] = Problem2(Fmat, permvec)
@@ -61,6 +68,7 @@ function [A4, A5] = Problem2(Fmat, permvec)
     A4 = abs(FmatDecrypted);
     A5 = abs(ifft2(ifftshift(FmatDecrypted)));
     imshow(abs(A5)./max(abs(A5)));
+    
 end
 
 % Helper Functions and stuff ----------------------------------------------

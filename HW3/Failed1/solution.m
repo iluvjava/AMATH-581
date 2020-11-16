@@ -1,0 +1,147 @@
+% Homework MATLAB template file
+% Your main file should be named "solution.m" and it should be saved as UTF-8 file.
+
+% !!! Solution failed because I didn't make the matrix from sparse to full
+% matrix. 
+
+function [consoleout, A1, A2, A3, A4, A5] = solution()
+ [consoleout, A1, A2, A3, A4, A5] = evalc('student_solution(0)'); 
+end
+
+function [A1, A2, A3, A4, A5] = student_solution(dummy_argument)
+    
+    % keep these lines to load Fmat and permvec
+    % DO NOT submit the mat files to Gradescope
+    load Fmat.mat 
+    load permvec.mat
+    
+    % your solution code goes here
+    
+    % assign the variables you are asked to save here  
+    [A1, A2, A3] = Problem1();
+    [A4, A5]     = Problem2(Fmat, permvec);
+end
+
+% your extra functions, if you need them, can be in other files (don't forget to upload them too!)
+
+function [A1, A2, A3] = Problem1()
+
+    N = 8; 
+    % 1D operator: 
+    P  = FiniteDiffMatrix([1 -2 1], [-1, 0, 1], 8);  
+    
+    % second derivatice second order central periodic. 
+    P2 = FiniteDiffMatrix([1, 0, 1], [-1, 0, 1], 8); 
+    % 2D operator: 
+    Laplacian = kron(eye(N), P) + kron(P, eye(N));
+    DeltaX = 20/N;  % domain: [-10, 10]; 
+    Laplacian = Laplacian./DeltaX^2;
+
+    PartialX2d = kron(eye(N), P2); 
+    PartialX2d = PartialX2d./(2*DeltaX);
+
+    PartialY2d = kron(P2, eye(N)); 
+    PartialY2d = PartialY2d./(2*DeltaX);
+
+    A1 = Laplacian;
+    A2 = PartialX2d;
+    A3 = PartialY2d;
+end
+
+function [A4, A5] = Problem2(Fmat, permvec)
+    CenterBlocks = Fmat(161:240, 161:240);
+    BlockVec = Transform(CenterBlocks, 1);
+    NewBlockVec = zeros(20, 20, 16);
+    for I = 1:16
+        J = permvec(I);
+        NewBlockVec(:, :, I) = BlockVec(:, :, J);
+    end
+    CenterBlocksDecrypted = Transform(NewBlockVec, 2);
+
+    FmatDecrypted = Fmat; 
+    FmatDecrypted(161: 240, 161: 240) = CenterBlocksDecrypted; 
+    imshow(abs(FmatDecrypted)./max(abs(FmatDecrypted)));
+    A4 = abs(FmatDecrypted);
+    A5 = abs(ifft2(ifftshift(FmatDecrypted)));
+    imshow(abs(A5)./max(abs(A5)));
+end
+
+% Helper Functions and stuff ----------------------------------------------
+
+function Result = Transform(theInput, mode)
+    % The input should be a matrix, and it has to be 400 by 400 for the
+    % sake of this HW. 
+    % Param: 
+    %   mode 1: means it's matrix to block vector.
+    %   mode 2: means it's block vector to matrix. 
+    
+    [M, N] = size(theInput);
+    
+    if mode == 1
+        % The input is a 80 by 80 matrix, the center of the Fourier
+        % space of the 400 by 400 image. 
+        if M ~= 80 || N ~= 80
+            error("The input matrix must be 400 by 400 for the sake of the HW. ");
+        end
+        Result = zeros(20, 20, 16);
+        Counter = 1;
+        for Row = 1:20:80
+           for Col = 1:20:80
+               Result(:, :, Counter) = theInput(Col: Col + 19, Row: Row + 19);
+               Counter = Counter + 1;
+           end
+        end
+        
+    elseif mode == 2
+        % The input is a vector with length 16, containing all the 20 by 20
+        % blocks needed to reconstruct the original matrix, the 80 by 80
+        % center fourier sequence. 
+        [M, N, O] = size(theInput); 
+        if ~(M == 20 && N == 20 && O == 16)
+            error("Input wrong Dimension, it should be 20x20x16"); 
+        end
+        Result = zeros(80, 80);
+        for Block = 0: 15
+            I = mod(Block, 4); 
+            J = int16(floor(Block/4));
+            % disp(strcat("I: ", num2str(I), " J: ", num2str(J)))
+            Result(I*20 + 1:I*20 + 20, J*20 + 1: J*20 + 20) = ... 
+                theInput(:, :, Block + 1);
+        end
+    end
+end
+
+function [b, a] = swap(a, b)
+end
+
+function P = FiniteDiffMatrix(filter, diagonalPosition, n)
+    % This is a smart function that is going to construct the differential
+    % matrix for you, assumning a periodic boundary conditions. It will
+    %
+    % Filter: 
+    %   This is the finite differnce coefficients. SHOULD BE ROW VECTOR.
+    %
+    % diagonalPosition: 
+    %   This represent where the finite different coefficients is applied
+    %   to the sampled points.
+    if length(filter) ~= length(diagonalPosition)
+        error("Please check you input, the number of diagonal equals to the finite diff coefficients.");
+    end
+    
+    e       = ones(n, 1);
+    P       = spdiags(e.*filter, diagonalPosition, n, n);
+    NewDiag = zeros(size(filter));
+    
+    % Handle Periodic Conditions. 
+    for I = 1: length(NewDiag)
+       if diagonalPosition(I) < 0
+           NewDiag(I) = -(n + diagonalPosition(I));
+        
+       elseif diagonalPosition(I) > 0
+           NewDiag(I) = n - diagonalPosition(I);
+       else
+           filter(I) = 0;  % No overlap. 
+       end
+    end
+    P = P + spdiags(e.*filter, NewDiag, n, n);
+end
