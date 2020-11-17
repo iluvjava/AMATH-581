@@ -5,17 +5,14 @@ function dwdt = Rhs(w, params)
     % w: 
     %   Vectorized vorticity function, x, columns, first, and then each of
     %   the sub vectors are the y, rows. 
-    % t: Dummy variables, it's just for using the general ODEs solver that
-    % is all. 
-    % 
-    % solveForPsi
-    %   A function handle that receives params, and the w to solve for the
-    %   stream function. 
+    % params: 
+    %   An instance of the Parameters class, so the function can take
+    %   whatever parameters it needs from the class properties and apply
+    %   then. 
     v = 0.001;
-    A = params.A; 
-    B = params.B; 
-    C = params.C; 
-    Psi = SolveForPsi(params, w); 
-    dwdt = (-B*Psi).*(C*w) + (C*Psi).*(B*Psi) + v.*(A*w);
-    
+    A = params.A;
+    B = params.B;
+    C = params.C;
+    Psi = SolveForPsi(params, w);
+    dwdt = -(B*Psi).*(C*w) + (C*Psi).*(B*w) + v.*(A*w);
 end

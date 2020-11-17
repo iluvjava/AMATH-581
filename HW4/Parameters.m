@@ -22,7 +22,7 @@ classdef Parameters
     
     methods 
         function obj = Parameters(n, deltaX)
-            P  = FiniteDiffMatrix([-1, 0, -1], [-1, 0, 1], n);
+            P  = FiniteDiffMatrix([-1, 0, 1], [-1, 0, 1], n);
             PartialX  = kron(P, eye(n))./(2*deltaX);
             PartialY  = kron(eye(n), P)./(2*deltaX);
             P2 = FiniteDiffMatrix([1, -2, 1], [-1, 0, 1], n);
