@@ -1,0 +1,6 @@
+function frammer = GetFramer()
+    % For movie. 
+    figure; 
+    frammer = struct('cdata',[],'colormap',[]);
+    
+end

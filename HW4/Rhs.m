@@ -9,6 +9,7 @@ function dwdt = Rhs(w, params)
     %   An instance of the Parameters class, so the function can take
     %   whatever parameters it needs from the class properties and apply
     %   then. 
+    
     v = 0.001;
     A = params.A;
     B = params.B;

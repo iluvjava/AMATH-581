@@ -12,5 +12,13 @@ function Psi = SolveForPsi(params, w)
         case 2 % LU
             Psi = U\(L\(P*w));
             return
+        case 3 % Biconjugate Gradient Stabalized method. 
+            Psi = bicgstab(A2, w);
+            return
+        case 4 % GMRES 
+            Psi = gmres(A2, w);
+            return
+        case 5 % FFT 2D Solve
+            return 
     end
 end

@@ -18,6 +18,9 @@ classdef Parameters
         % These parameters are for solving the Stream function using LU
         % decomposition. 
         L;  U;  P;
+        
+        % This part is for statistics and bench marking the algorithm. 
+        TimesStats;  % java object is mutable! 
     end
     
     methods 
@@ -32,8 +35,10 @@ classdef Parameters
             obj.B  = PartialX;
             obj.C  = PartialY;
             obj.A2 = Laplacian; 
-            obj.A2(1, 1) = 2;  % Modifications on the Laplacian. 
+            obj.A2(1, 1) = 2/deltaX^2;  % Modifications on the Laplacian. 
             [obj.L, obj.U, obj.P] = lu(obj.A2);
+            import java.util.ArrayList; 
+            obj.TimesStats = ArrayList();
         end
     end
     
