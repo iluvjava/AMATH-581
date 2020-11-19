@@ -88,14 +88,14 @@ movie(Framer);
 
 % Fluid Animaiton 
 clear variables 
-n = 256; 
+n = 1; 
 Params = Parameters(n, 20/n);
 Params.l = 20;
 xs = linspace(-10, 10, n);
 ys = linspace(-10, 10, n);  
 InitialDistribution = @(x, y) exp(-x.^2 - (y.^2./20));
 w_vec = VectorizeInitialDistribution(xs, ys, InitialDistribution);
-Tspan = 0: 0.5: 140;
+Tspan = 0: 0.5: 40;
 Params.SolveModes = 5; 
 
 OdeOptions = odeset("RelTol", 1e-6, "AbsTol", 1e-6);

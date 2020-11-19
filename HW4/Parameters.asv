@@ -37,15 +37,15 @@ classdef Parameters
             PartialY  = kron(eye(n), P)./(2*deltaX);
             P2 = FiniteDiffMatrix([1, -2, 1], [-1, 0, 1], n);
             Laplacian = kron(P2, eye(n)) + kron(eye(n), P2);
-            Laplacian = Laplacian./(deltaX^2);
+            Laplacian = Laplacian./(deltaX.^2);
             obj.A  = Laplacian;
             obj.B  = PartialX;
             obj.C  = PartialY;
             obj.A2 = Laplacian; 
-            obj.A2(1, 1) = 2/deltaX^2  % Modifications on the Laplacian. 
+            obj.A2(1, 1) = 2/deltaX^2;  % Modifications on the Laplacian. 
             [obj.L, obj.U, obj.P] = lu(obj.A2);
             import java.util.ArrayList; 
-            obj.TimeStats = ArrayList();
+            obj.TimesStats = ArrayList();
         end
     end
     
