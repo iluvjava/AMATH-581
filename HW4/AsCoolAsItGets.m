@@ -11,3 +11,20 @@
 % 
 % Make then into moview, colors and coolness are the key factor. 
 
+
+function f = GetInitialDistributions(modes)
+    % Gets the initial distributions, this function will return a function
+    % that provides an initial distribution for the simulations. 
+    
+    switch modes
+        case 1
+            return 
+        case 2 
+            return
+        case 3
+            return
+        case 4
+            return
+    end
+    f; 
+end

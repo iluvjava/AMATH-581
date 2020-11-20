@@ -53,15 +53,14 @@ movie(frame, 1: length(frame), 60);
 clear variables 
 
 % Setting up Parameters 
-n = 64; 
+n = 256; 
 Params = Parameters(n, 20/n);
 xs = linspace(-10, 10, n);
 ys = linspace(-10, 10, n);  
 InitialDistribution = @(x, y) exp(-x.^2 - (y.^2./20));
-InitialDistribution = @(x, y) InitialDistribution(x - 5, y - 5);
 w_vec = VectorizeInitialDistribution(xs, ys, InitialDistribution);
 Tspan = 0: 1: 40;
-Params.SolveModes = 4; 
+Params.SolveModes = 3; 
 
 % Setting Options for solving and stuff. 
 
@@ -88,12 +87,12 @@ movie(Framer);
 
 % Fluid Animaiton 
 clear variables 
-n = 256; 
+n = 512; 
 Params = Parameters(n, 20/n);
 Params.l = 20;
 xs = linspace(-10, 10, n);
 ys = linspace(-10, 10, n);  
-InitialDistribution = @(x, y) exp(-x.^2 - (y.^2./20));
+InitialDistribution = @(x, y) -exp(-x.^2 - (y.^2./20));
 w_vec = VectorizeInitialDistribution(xs, ys, InitialDistribution);
 Tspan = 0: 0.5: 140;
 Params.SolveModes = 5; 
@@ -107,14 +106,26 @@ DataMatrices = zeros(n, n, size(Ws, 1));
 for R = 1: size(Ws, 1)
     DataMatrices(:, :, R) = reshape(Ws(R, :), n, n);
 end
-
+%% 
 Framer = GetFramer();
 for I = 1: size(DataMatrices, 3)
     imagesc(DataMatrices(:, :, I));
     disp(strcat("Frame: ", num2str(I/size(DataMatrices, 3))));
-    Framer(I) = getframe;
+    Framer(I) = getframe(gcf);
 end
 
 %% Play the movie! 
 figure; 
 movie(Framer);
+WriteFrames(Framer);
+%% 
+function outArg = WriteFrames(framer)
+    vw = VideoWriter('test.avi');
+    open(vw);
+    for k = 1: length(framer)
+       writeVideo(vw, framer(k));
+    end
+    close(vw);
+    
+end
+

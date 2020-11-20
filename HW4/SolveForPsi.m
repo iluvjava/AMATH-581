@@ -7,17 +7,34 @@ function Psi = SolveForPsi(params, w)
     P = params.P;
     tic;
     switch params.SolveModes
+        
+        case 0
+            error("Please specify solver for Stream function.");
         case 1 % BackSlash
             Psi = A2\w;
+            disp("Backslash.");
             
         case 2 % LU
             Psi = U\(L\(P*w));
+            disp("LU Solve.");
             
         case 3 % Biconjugate Gradient Stabalized method. 
-            Psi = bicgstab(A2, w, params.BicgstabTOL);
+            if length(params.LastGuess.Psi) ~=  length(w)
+                Psi = bicgstab(A2, w, params.BicgstabTOL, params.BicgstabItr);
+            else
+                Psi = bicgstab(A2, w, params.BicgstabTOL, params.BicgstabItr, ... 
+                    [], [], params.LastGuess.Psi);
+            end 
+            params.LastGuess.Psi = Psi;
             
         case 4 % GMRES 
-            Psi = gmres(A2, w, [] ,params.GemresTOL);
+            if length(params.LastGuess.Psi) ~=  length(w)
+               Psi = gmres(A2, w, [], params.GemresTOL, params.GmresItr);
+            else
+               Psi = gmres(A2, w, [], params.GemresTOL, ... 
+                    params.GmresItr, [], [], params.LastGuess.Psi);
+            end
+            params.LastGuess.Psi = Psi;
             
         case 5 % FFT 2D Solve
             N = params.n; 
@@ -29,9 +46,11 @@ function Psi = SolveForPsi(params, w)
             ky = kx';
             Psi = real(ifft2(-WFourier./(kx.^2 + ky.^2)));
             Psi = reshape(Psi, N*N, 1);
+            disp("FFT Spectral Solve");
     end
-    TimeTransgressed = toc;
-    params.TimeStats.add(TimeTransgressed);
+    Timepassed = toc;
+    disp(strcat("tic toc: ", num2str(Timepassed)));
+    params.TimeStats.add(Timepassed);
 end
 
 % function trimmed = TrimOffBoundary(w, n)
