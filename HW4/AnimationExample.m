@@ -53,11 +53,13 @@ movie(frame, 1: length(frame), 60);
 clear variables 
 
 % Setting up Parameters 
-n = 256; 
+n = 64; 
 Params = Parameters(n, 20/n);
 xs = linspace(-10, 10, n);
 ys = linspace(-10, 10, n);  
+ys = ys(end:-1:1);
 InitialDistribution = @(x, y) exp(-x.^2 - (y.^2./20));
+InitialDistribution = @(x, y) InitialDistribution(x - 5, y - 5);
 w_vec = VectorizeInitialDistribution(xs, ys, InitialDistribution);
 Tspan = 0: 1: 40;
 Params.SolveModes = 3; 
@@ -78,21 +80,24 @@ for I = 1: size(DataMatrices, 3)
     disp(strcat("Frame: ", num2str(I/size(DataMatrices, 3))));
     Framer(I) = getframe;
 end
-%% 
+%% Play the movie! 
 figure; 
-movie(Framer);
+% movie(Framer);
+WriteFrames(Framer);
 
 
 %% Fluid but with FFT. 
 
 % Fluid Animaiton 
 clear variables 
-n = 512; 
+n = 126; 
 Params = Parameters(n, 20/n);
 Params.l = 20;
 xs = linspace(-10, 10, n);
-ys = linspace(-10, 10, n);  
-InitialDistribution = @(x, y) -exp(-x.^2 - (y.^2./20));
+ys = linspace(-10, 10, n);
+ys = ys(end:-1:1);
+
+InitialDistribution = @(x, y) exp(-x.^2 - (y.^2./20));
 w_vec = VectorizeInitialDistribution(xs, ys, InitialDistribution);
 Tspan = 0: 0.5: 140;
 Params.SolveModes = 5; 
@@ -109,14 +114,14 @@ end
 %% 
 Framer = GetFramer();
 for I = 1: size(DataMatrices, 3)
-    imagesc(DataMatrices(:, :, I));
+    surf(DataMatrices(:, :, I));
     disp(strcat("Frame: ", num2str(I/size(DataMatrices, 3))));
     Framer(I) = getframe(gcf);
 end
 
 %% Play the movie! 
 figure; 
-movie(Framer);
+% movie(Framer);
 WriteFrames(Framer);
 %% 
 function outArg = WriteFrames(framer)

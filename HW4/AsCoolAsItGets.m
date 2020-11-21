@@ -26,5 +26,14 @@ function f = GetInitialDistributions(modes)
         case 4
             return
     end
-    f; 
+    f = 0;
+end
+
+function argOut = SaveToAminations(datMatrix, fileName)
+    % This function will accept the data matrix from the simulations and
+    % then return save an animations. 
+    
+    
+    
+    argOut; 
 end

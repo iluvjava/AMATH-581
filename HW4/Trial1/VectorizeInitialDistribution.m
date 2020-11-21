@@ -15,6 +15,4 @@ function result = VectorizeInitialDistribution(xs, ys, fxn)
     Zs       = fxn(Xs, Ys);
     m = length(xs); n = length(ys);
     result = reshape(Zs, m*n, 1);
-    
 end
-
