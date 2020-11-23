@@ -39,6 +39,7 @@ classdef Parameters
                 P  = FiniteDiffMatrix([-1, 0, 1], [-1, 0, 1], n);
                 PartialX  = kron(P, eye(n))./(2*deltaX);
                 PartialY  = kron(eye(n), P)./(2*deltaX);
+                
                 P2 = FiniteDiffMatrix([1, -2, 1], [-1, 0, 1], n);
                 Laplacian = kron(P2, eye(n)) + kron(eye(n), P2);
                 Laplacian = Laplacian./(deltaX^2);

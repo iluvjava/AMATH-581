@@ -46,7 +46,7 @@ classdef Parameters
                 obj.B  = PartialX;
                 obj.C  = PartialY;
                 obj.A2 = Laplacian;
-                obj.A2(1, 1) = 2/deltaX^2;  % Modifications on the Laplacian. 
+                obj.A2(1, 1) = 2/deltaX;  % Modifications on the Laplacian. 
             if n <= 128  % Only LU if this is not too beig 
                 [obj.L, obj.U, obj.P] = lu(obj.A2);
             end

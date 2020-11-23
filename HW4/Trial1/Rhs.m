@@ -1,4 +1,4 @@
-function dwdt = Rhs(w, params)
+function dwdt = Rhs(omega, params)
     % This functions receives the omega, vorticity function, and then it
     % will return the next time-stepping for the vorticity function. 
     % 
@@ -14,6 +14,6 @@ function dwdt = Rhs(w, params)
     A = params.A;
     B = params.B;
     C = params.C;
-    Psi = SolveForPsi(params, w);
-    dwdt = -(B*Psi).*(C*w) + (C*Psi).*(B*w) + v.*(A*w);
+    Psi = SolveForPsi(params, omega);
+    dwdt = -(B*Psi).*(C*omega) + (C*Psi).*(B*omega) + v.*(A*omega);
 end
