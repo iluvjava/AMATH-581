@@ -12,11 +12,9 @@ function Psi = SolveForPsi(params, w)
             error("Please specify solver for Stream function.");
         case 1 % BackSlash
             Psi = A2\w;
-            disp("Backslash.");
             
         case 2 % LU
             Psi = U\(L\(P*w));
-            disp("LU Solve.");
             
         case 3 % Biconjugate Gradient Stabalized method. 
             if length(params.LastGuess.Psi) ~=  length(w)
@@ -46,10 +44,8 @@ function Psi = SolveForPsi(params, w)
             ky = kx';
             Psi = real(ifft2(-WFourier./(kx.^2 + ky.^2)));
             Psi = reshape(Psi, N^2, 1);
-            disp("FFT Spectral Solve");
     end
     Timepassed = toc;
-    disp(strcat("tic toc: ", num2str(Timepassed)));
     params.TimeStats.add(Timepassed);
 end
 

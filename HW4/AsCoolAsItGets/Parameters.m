@@ -31,6 +31,8 @@ classdef Parameters
         BicgstabItr = 500;
         GmresItr = 400;
         LastGuess = PsiGuess();
+        xs;
+        ys;
     end
     
     methods 
