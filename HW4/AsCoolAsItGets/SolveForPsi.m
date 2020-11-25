@@ -46,6 +46,7 @@ function Psi = SolveForPsi(params, w)
             Psi = reshape(Psi, N^2, 1);
     end
     Timepassed = toc;
+    disp(strcat("Time Passed: ", num2str(Timepassed)));
     params.TimeStats.add(Timepassed);
 end
 

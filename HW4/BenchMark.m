@@ -4,7 +4,7 @@
 clear variables
 % delete(gcp('nocreate'));  
 
-AverageTime = RunSolvingRoutine(128, [0: 0.1: 10]);
+AverageTime = RunSolvingRoutine(128, 0: 0.1: 10);
 disp(AverageTime);
 
 %% 
@@ -13,7 +13,7 @@ Xaxis = categorical(["BackSlash Solver", "LU Solver", "BiCGStab", "Gmres", "FFT 
 bar(Xaxis, AverageTime);
 title("Average time over ODE45");
 ylabel("Seconds");
-
+saveas(gcf, "benchmark", "png");
 
 function AverageTimes = RunSolvingRoutine(n, Tspan)
     % Compute the average time for the given configuration of simulation. 
