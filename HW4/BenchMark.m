@@ -6,8 +6,8 @@ clear variables
 
 AverageTime = RunSolvingRoutine(128, 0: 0.1: 10);
 disp(AverageTime);
+%%
 
-%% 
 figure;
 Xaxis = categorical(["BackSlash Solver", "LU Solver", "BiCGStab", "Gmres", "FFT Spectral"]);
 bar(Xaxis, AverageTime);
