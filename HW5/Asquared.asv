@@ -1,0 +1,5 @@
+function [outputArg1,outputArg2] = Asquared(uFourier, vFourier)
+    % Compute the A^2 quantity as specified in the HW5, and takes in u, v,
+    % the reactions agents under the fourier domain for computations. 
+end
+
