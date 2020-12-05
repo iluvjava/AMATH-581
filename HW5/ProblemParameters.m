@@ -27,22 +27,25 @@ classdef ProblemParameters
             this.L      = L; 
             this.n      = n;
             this.Deltax = (2*L)/n;
-            this.xs     = -L: this.Deltax: L - this.Deltax; 
-            this.ys     = xs; 
-            this.kx     = 1i.*ifftshift((2*pi/L).*(n/2: n/2 - 1));
-            this.ky     = ky;
+            
+            this.xs     = -L: this.Deltax: L - this.Deltax;
+            this.ys     = this.xs;
+            
+            this.kx     = 1i.*fftshift((2*pi/L).*(-n/2: n/2 - 1));
+            this.ky     = this.kx;
+            
             [this.Kx, this.Ky] = meshgrid(this.kx, this.ky);    
             this.Laplacian     = this.Kx.^2 + this.Ky.^2;
-            
         end
 
-        
-        function [u, v] = GetInitialConditions1(this)
-           % Get the initial conditiosn specified in the HW sheet.  
+        % Problem domain, Matrix form 
+        function [u, v] = GetInitialConditions(this) 
            [X, Y] = meshgrid(this.xs, this.ys);
-           m = 1;  % Number of Spirals. 
-           u = tanh(sqrt(X.^2 + Y.^2)).*cos(m*angle(X + 1i*Y) - (sqrt(X.^2 + Y.^2)));
-           v = tanh(sqrt(X.^2 + Y.^2)).*sin(m*angle(X + 1i*Y) - (sqrt(X.^2 + Y.^2)));
+           m      = 1;  % Number of Spirals.
+           u      = tanh(sqrt(X.^2 + Y.^2)).*... 
+               cos(m*angle(X + 1i*Y) - (sqrt(X.^2 + Y.^2)));
+           v      = tanh(sqrt(X.^2 + Y.^2)).*... 
+               sin(m*angle(X + 1i*Y) - (sqrt(X.^2 + Y.^2)));
         end
         
         function Argout = VectorPack(this, u, v)
@@ -58,8 +61,8 @@ classdef ProblemParameters
             % Unpack the vectors for the ODEs (in fourier or not) into 2
             % matrices that represetns the u, v grids discretizations. 
             
-            uvec = vec(1: this.n); 
-            vvec = vec(this.n + 1: end);
+            uvec = vec(1: this.n^2); 
+            vvec = vec(this.n^2 + 1: end);
             u    = reshape(uvec, this.n, this.n);
             v    = reshape(vvec, this.n, this.n);   
         end
