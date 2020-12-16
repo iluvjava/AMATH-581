@@ -1,41 +1,30 @@
 % Testing if the Porblem Parameters Class is working correctly. 
 clear variables; clc;
-params      = ProblemParameters(10, 128);
-params.D1   = 0.1; 
-params.D2   = 0.1; 
-params.m    = 1; 
+params      = ProblemParameters(10, 64);
+params.D1   = 0.5;
+params.D2   = 0.5;
+params.m    = 1;
 params.beta = 1;
 
-[u0, v0] = params.GetInitialConditions();
+[u0, v0]    = params.GetInitialConditionsFFT();
 VisualizeProblem(u0, v0);
 
-u0v0  = params.VectorPack(fft2(u0), fft2(v0));
-tspan = 0: 0.1: 10;
-[tspan, solved] = ode45(@(t, y) RHSFFT(y, params), tspan, u0v0);
+u0v0Fourier     = params.VectorPack(fft2(u0), fft2(v0));
+tspan           = 0: 0.5: 90;
+[tspan, solved] = ode45(@(t, y) RHSFFT(y, params), tspan, u0v0Fourier);
 
-%% PLOTTING
-figure('Renderer', 'painters', 'Position', [0 0 400 900]);
+%% PLOTTING.
+Framer = GetFramer();
 for II = 1: size(solved, 1)
     [uf, vf] = params.VectorUnpack(solved(II, :));
     ut       = ifft2(uf);
     vt       = ifft2(vf);
     VisualizeProblem(ut, vt);
-    pause(0.5);
+    disp(strcat("Frame: ", num2str(II)));
+    Framer(II) = getframe(gcf);
 end
+WriteFrames(Framer, "SimFFT");
 
- %% HELPER FUNCTIONS. 
-function null = VisualizeProblem(u, v)
 
-    subplot(2, 1, 1);
-    
-    pcolor(u); shading interp; title("U_t")
-    grid on
-    pbaspect([1 1 1]);
-    
-    subplot(2, 1, 2);
-    pcolor(v); shading interp; title("V_t")
-    grid on
-    pbaspect([1 1 1]);
-    
-    null = nan;
-end
+
+

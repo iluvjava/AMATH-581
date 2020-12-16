@@ -1,0 +1,6 @@
+f = @(x) 1; 
+[D, chebPoints] = cheb(20);
+Dtilde  = D(2: end - 1, 2: end - 1);
+Dtilde2 = Dtilde^2; 
+b = -2.*Dtilde2(:, 1) + 2.*Dtilde(:, end);
+plot(chebPoints(2: end - 1), (Dtilde^2)\b);
